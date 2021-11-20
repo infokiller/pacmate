@@ -18,3 +18,9 @@ All requirements are optional, but some features won't work without them.
 ## Configuration
 
 TODO
+
+## TODOs
+
+- Document configuration options
+- Add `PKGBUILD` and upload to AUR
+- Consider adding other pacman utilities
