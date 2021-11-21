@@ -84,7 +84,7 @@ _does_pacman_need_sudo() {
   fi
   # Bash's getopts doesn't support long options, so we start by parsing them
   # manually.
-  local -A long_options
+  local -A long_options=()
   local keep_parsing=1
   local args_without_long_options=()
   for arg in "$@"; do
@@ -109,7 +109,7 @@ _does_pacman_need_sudo() {
     # Remove the leading --.
     long_options["${arg##--}"]=1
   done
-  local -A short_options
+  local -A short_options=()
   if ((keep_parsing)); then
     local opt
     # The prefix colon to getopts is to ignore errors (unknown args).
