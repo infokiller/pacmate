@@ -54,7 +54,7 @@ _message() {
     normal="$(tput sgr0 2> /dev/null)" || true
   fi
   echo -en "${color}"
-  printf ':: %s\n' "${normal}${bold}${*}${normal}"
+  printf '::%s Pacmate: %s\n' "${normal}${bold}" "${*}${normal}"
 }
 
 _print_from_line() {
@@ -144,12 +144,12 @@ _print_news() {
     return
   fi
   if _command_exists yay; then
-    _message 'Fetching news using yay...'
+    _message 'fetching news using yay...'
     yay -Pw
     return
   fi
   if _command_exists archnews; then
-    _message 'Fetching news using archnews...'
+    _message 'fetching news using archnews...'
     archnews --unread
     return
   fi
@@ -158,11 +158,11 @@ _print_news() {
   # using a higher priority directory, so this is not done for now.
   # https://github.com/bradford-smith94/informant
   if _command_exists informant; then
-    _message 'Fetching news using infromant...'
+    _message 'fetching news using infromant...'
     informant list
     return
   fi
-  _warning 'Missing deps for fetching news (one of yay, archnews, informant)'
+  _warning 'missing deps for fetching news (one of yay, archnews, informant)'
   return 1
 }
 
