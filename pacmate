@@ -144,10 +144,12 @@ _print_news() {
     return
   fi
   if _command_exists yay; then
+    _message 'Fetching news using yay...'
     yay -Pw
     return
   fi
   if _command_exists archnews; then
+    _message 'Fetching news using archnews...'
     archnews --unread
     return
   fi
@@ -156,9 +158,11 @@ _print_news() {
   # using a higher priority directory, so this is not done for now.
   # https://github.com/bradford-smith94/informant
   if _command_exists informant; then
+    _message 'Fetching news using infromant...'
     informant list
     return
   fi
+  _warning 'Missing deps for fetching news (one of yay, archnews, informant)'
   return 1
 }
 
@@ -188,17 +192,23 @@ _print_warnings() (
 )
 
 main() {
-  _print_news || _warning 'failed fetching archlinux news'
   local cmd=()
+  local sudo=0
   if _does_pacman_need_sudo "$@"; then
+    sudo=1
     cmd+=(sudo)
   fi
   cmd+=(pacman "$@")
-  local n
-  n="$(_num_lines "${PACMAN_LOG_FILE}")"
+  if ((sudo)); then
+    _print_news || _warning 'failed fetching archlinux news'
+    local n
+    n="$(_num_lines "${PACMAN_LOG_FILE}")"
+  fi
   local s=0
   "${cmd[@]}" || s=$?
-  _print_warnings "${n}" || _warning 'failed printing logs'
+  if ((sudo)); then
+    _print_warnings "${n}" || _warning 'failed printing logs'
+  fi
   return $s
 }
 
