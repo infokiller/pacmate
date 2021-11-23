@@ -9,9 +9,13 @@ A simple pacman wrapper that does 3 things:
 
 ## Requirements
 
-All requirements are optional, but some features won't work without them.
+The only hard requirement is `pacman` and `bash` (which is included in
+`pacman`).
 
-- For printing warnings: one of {`wc`, `grep`, `python`} *AND* one of {`tail`,
+All the requirements below are optional, but some features won't work without
+them.
+
+- For printing warnings: one of {`wc`, `grep`, `python`} _AND_ one of {`tail`,
   `sed`, `awk`}
 - For printing news: one of {`yay`, `archnews`, `informant`}
 
@@ -21,6 +25,11 @@ TODO
 
 ## TODOs
 
-- Document configuration options
+- Add config file
+- Add `PACMATE_CONFIG_FILE` variable to control config file path (can be used
+  for per-machine config, although bash control flow can also be used for that)
+- Add ignore regexes for warnings as a config option
 - Add `PKGBUILD` and upload to AUR
+- Document configuration options
 - Consider adding other pacman utilities
+- Add tests and CI
