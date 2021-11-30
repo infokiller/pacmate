@@ -77,11 +77,9 @@ _print_from_line() {
   return 1
 }
 
-# Heuristic for figuring out if pacman needs to run with sudo.
-_does_pacman_need_sudo() {
-  if ((EUID == 0)); then
-    return 1
-  fi
+# Parses the command line arguments to figure our if the action is mutating,
+# for example updating the database or adding/removing a package.
+_is_mutating_action() {
   # Bash's getopts doesn't support long options, so we start by parsing them
   # manually.
   local -A long_options=()
@@ -193,20 +191,20 @@ _print_warnings() (
 
 main() {
   local cmd=()
-  local sudo=0
-  if _does_pacman_need_sudo "$@"; then
-    sudo=1
+  local mutating=1
+  _is_mutating_action "$@" || mutating=0
+  if ((mutating && EUID != 0)); then
     cmd+=(sudo)
   fi
   cmd+=(pacman "$@")
-  if ((sudo)); then
+  if ((mutating)); then
     _print_news || _warning 'failed fetching archlinux news'
     local n
     n="$(_num_lines "${PACMAN_LOG_FILE}")"
   fi
   local s=0
   "${cmd[@]}" || s=$?
-  if ((sudo)); then
+  if ((mutating)); then
     _print_warnings "${n}" || _warning 'failed printing logs'
   fi
   return $s
